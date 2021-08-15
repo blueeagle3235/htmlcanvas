@@ -6,6 +6,10 @@
 
 ## Resources
 
+### References
+
+[Canvas API on MDN](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
+
 ### Tutorials
 
 [Canvas Clock on w3schools](https://www.w3schools.com/graphics/canvas_clock_start.asp)
