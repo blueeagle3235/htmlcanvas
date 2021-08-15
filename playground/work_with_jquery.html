@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Document</title>
+    <style>
+      canvas {
+        cursor: crosshair;
+        border: 1px solid #000000;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="800" height="500"></canvas>
+    <div id="output"></div>
+    <script>
+      //Canvas
+      var canvas = document.getElementById("canvas");
+      var ctx = canvas.getContext("2d");
+      //Variables
+      var canvasx = $(canvas).offset().left;
+      var canvasy = $(canvas).offset().top;
+      var last_mousex = (last_mousey = 0);
+      var mousex = (mousey = 0);
+      var mousedown = false;
+
+      //Mousedown
+      $(canvas).on("mousedown", function (e) {
+        last_mousex = parseInt(e.clientX - canvasx);
+        last_mousey = parseInt(e.clientY - canvasy);
+        mousedown = true;
+      });
+
+      //Mouseup
+      $(canvas).on("mouseup", function (e) {
+        mousedown = false;
+      });
+
+      //Mousemove
+      $(canvas).on("mousemove", function (e) {
+        mousex = parseInt(e.clientX - canvasx);
+        mousey = parseInt(e.clientY - canvasy);
+        if (mousedown) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height); //clear canvas
+          ctx.beginPath();
+          ctx.moveTo(last_mousex, last_mousey);
+          ctx.lineTo(mousex, mousey);
+          ctx.strokeStyle = "black";
+          ctx.lineWidth = 5;
+          ctx.lineJoin = ctx.lineCap = "round";
+          ctx.stroke();
+        }
+        //Output
+        $("#output").html(
+          "current: " +
+            mousex +
+            ", " +
+            mousey +
+            "<br/>last: " +
+            last_mousex +
+            ", " +
+            last_mousey +
+            "<br/>mousedown: " +
+            mousedown
+        );
+      });
+    </script>
+  </body>
+</html>
