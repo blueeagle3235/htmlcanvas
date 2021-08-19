@@ -1,14 +1,19 @@
 # HTML 5 Canvas Roadmap
 
+- api
+  - context
 - draw (2d)
   - line
   - path
   - shape
     - polygon
     - circle /arc / eclipse
+  - gradient
+  - clip
+  - shadows
   - ...
-- api
-  - context
+- text
+- image
 - events
   - keybord
   - mouse
