@@ -1,9 +1,17 @@
 # HTML 5 Canvas Roadmap
 
-- draw
+- draw (2d)
   - line
   - path
   - shape
+    - polygon
+    - circle /arc / eclipse
+  - ...
+- api
+  - context
+- events
+  - keybord
+  - mouse
   - ...
 - Transform
   - translate
@@ -11,6 +19,7 @@
   - scale
   - ...
 - animation
+- physics
 
 ## Events
 
