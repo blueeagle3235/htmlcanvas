@@ -1,4 +1,16 @@
-# HTML 5 Canvas
+# HTML 5 Canvas Roadmap
+
+- draw
+  - line
+  - path
+  - shape
+  - ...
+- Transform
+  - translate
+  - rotate
+  - scale
+  - ...
+- animation
 
 ## Events
 
