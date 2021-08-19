@@ -19,16 +19,19 @@
     <script>
       var canvas = document.getElementById("canvas"),
         context = canvas.getContext("2d"),
-        timeNow = new TimeNow();
+        timeNow = new TimeNow(),
+        timeNow2 = new TimeNow();
 
       timeNow.x = 30;
       timeNow.y = 30;
-
+      timeNow2.x = 30;
+      timeNow2.y = 180;
       function drawFrame() {
         window.requestAnimationFrame(drawFrame);
         context.clearRect(0, 0, canvas.width, canvas.height);
 
         timeNow.draw(context);
+        timeNow2.draw(context);
       }
 
       drawFrame();

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="canvas" width="400" height="400"></canvas>
+    <script>
+        // var c = document.getElementById("canvas");
+        // var context = c.getContext("2d");
+        // context.moveTo(0, 0);
+        // context.lineTo(200, 100);
+        // context.stroke();
+        var canvas=document.getElementById("canvas");
+        var context= canvas.getContext("2d");
+        function draw(startX,startY,finishX,finishY){
+            context.moveTo(startX,startY);
+            context.lineTo(finishX,finishY);
+            context.stroke();
+        }
+        function drawSquare(startX,startY,size,colorType){
+            context.fillStyle=colorType;
+            if (colorType===undefined){
+                context.fillStyle='000000';
+            }
+            context.fillRect(startX-size/2,startY-size/2,size,size);
+        }
+        drawSquare(200,200,40,'red');
+        drawSquare(100,50,80,'blue');
+        drawSquare(300,300,60);
+        context.stroke();
+        context.beginPath();
+        context.arc(100, 100, 23, 0, 2 * Math.PI);
+        //arc(x,y,r,startangle,endangle)
+        context.fillStyle = "#CCA";
+        context.fill();
+
+        drawCurve( 15, 400, 30, 200, 45, 45, 60, 300, 'green' );
+
+// B. DRAW CURVE function.
+        function drawCurve(xStart, yStart, xControl1, yControl1,
+        xControl2, yControl2, xEnd, yEnd, color)
+        {
+        // B1. ATTRIBUTES.
+            context.strokeStyle = color; context.lineWidth = 9;
+            context.lineCap = 'round'; context.shadowOffsetX = 3;
+            context.shadowOffsetY = 3; context.shadowBlur = 5;
+            context.shadowColor = 'gr;ay';
+            // B2. STARTING point.
+            context.beginPath();
+            context.moveTo(xStart, yStart);
+            // B3. BEZIER curve.
+            context.bezierCurveTo(xControl1, yControl1,xControl2, yControl2,xEnd, yEnd);
+            // B4. DRAW curve.
+            context.stroke();
+        }
+    </script>
+</body>
+</html>
