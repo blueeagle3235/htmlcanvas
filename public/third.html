@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id='canvas' width='800' height='600'></canvas>
+    <script src='../BookExamples/HTML5Animation/include/utils.js'></script>
+    <script src='objects/square.js'></script>
+    <script>
+        var canvas=document.getElementById('canvas'),
+        context=canvas.getContext('2d'),
+        square=new Square(7),
+        xVel=0,
+        yVel=0,
+        xaccelTest=0,
+        yaccelTest=0;
+
+        square.x = canvas.width / 2;
+        square.y = canvas.height / 2;
+
+        // square2=new Square(7);
+        // square2.x = canvas.width / 3;
+        // square2.y = canvas.height / 3;
+        window.addEventListener('keyup', function(){
+            xaccelTest=0;
+            yaccelTest=0; 
+        }, false);
+        window.addEventListener('keydown', keyInput, false);
+
+        function updateFrame(){
+            window.requestAnimationFrame(updateFrame);
+            context.clearRect(0,0,canvas.width,canvas.height);
+            xVel+=xaccelTest;
+            yVel+=yaccelTest;
+
+            xVel=xVel*0.99;
+            yVel=yVel*0.99;
+            square.x+=xVel;
+            square.y+=yVel;
+           
+            square.draw(context);
+
+
+
+            // square2.draw(context);
+            // square2.x+=square.xVel;
+            // square2.y+=square.yVel;
+            // square2.xVel=square.xVel*0.95;
+            // square2.yVel=square.yVel*0.95;
+        }
+        function keyInput(event){
+            switch (event.keyCode) {
+                case 38:
+                yaccelTest=-0.15;
+                break;
+                case 40:
+                yaccelTest=+0.15;
+                break;
+                case 37:
+                xaccelTest=-0.15;
+                break;
+                case 39:
+                xaccelTest=+0.15;
+                break;
+                default:
+            }
+        }
+        updateFrame();
+    </script>
+</body>
+</html>

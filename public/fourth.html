@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ping pong</title>
+    
+</head>
+<body>
+    <canvas id='canvas' width='800' height='600' style="border:2px solid #000000;"></canvas>
+    <script src='objects/ball.js'></script>
+    <script src='../BookExamples/HTML5Animation/include/utils.js'></script>
+    <script src='objects/rectangle.js'></script>
+    <script>
+        var canvas=document.getElementById('canvas'),
+            context=canvas.getContext('2d'),
+            ball=new Ball(12),
+            rectangle=new Rectangle(130,20),
+            rectanglexv=0,
+            xvel=Math.random()*6-3,
+            yvel=Math.random() * (6 - 3) + 3;
+
+        ball.x=canvas.width/2;
+        ball.y=canvas.height/2;
+        rectangle.x=canvas.width/2;
+        rectangle.y=canvas.height-50;
+        window.addEventListener('keydown', keyInput, false);
+        function updateFrame(){
+            window.requestAnimationFrame(updateFrame);
+            context.clearRect(0,0,canvas.width,canvas.height);
+
+            var boundaryleft=0,
+                boundarytop=0,
+                boundaryright=canvas.width
+                boundarybottom=canvas.height;
+
+            ball.x+=xvel;
+            ball.y+=yvel;
+            rectangle.x+=rectanglexv;
+            rectanglexv*=0.9;
+
+            if (utils.intersects(ball.getBounds(), rectangle)) {
+                yvel*=-1
+            }
+
+            if (rectangle.x + rectangle.width > boundaryright) {
+                rectangle.x = boundaryright - rectangle.width;
+                rectanglexv*=0;
+            } else if (rectangle.x< boundaryleft) {
+                rectangle.x = boundaryleft;
+                rectanglexv*=0;
+            }
+
+            
+            if (ball.x + ball.radius > boundaryright) {
+                ball.x = boundaryright - ball.radius;
+                xvel *= -1;
+            } else if (ball.x - ball.radius < boundaryleft) {
+                ball.x = boundaryleft + ball.radius;
+                xvel *= -1;
+            }
+            if (ball.y + ball.radius > boundarybottom) {
+                ball.y = boundarybottom - ball.radius;
+                yvel *= -1;
+            } else if (ball.y - ball.radius < boundarytop) {
+                ball.y = boundarytop + ball.radius;
+                yvel *= -1;
+            }
+            ball.draw(context);
+            rectangle.draw(context);
+
+        }
+        function keyInput(event){
+            switch (event.keyCode) {
+                case 37:
+                rectanglexv=-5;
+                break;
+                case 39:
+                rectanglexv=+5;
+                break;
+                default:
+            }
+        }
+        updateFrame();
+</script>
+
+</body>
+</html>

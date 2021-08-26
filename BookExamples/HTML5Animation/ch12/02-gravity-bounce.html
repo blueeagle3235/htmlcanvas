@@ -21,10 +21,10 @@
           numParticles = 30;
 
       for (var particle, i = 0; i < numParticles; i++) {
-        particle = new Ball(5);
+        particle = new Ball((Math.random()*12));
         particle.x = Math.random() * canvas.width;
         particle.y = Math.random() * canvas.height;
-        particle.mass = 1;
+        particle.mass = (Math.random()*3);
         particles.push(particle);
       }
 
