@@ -42,3 +42,8 @@ var collisioncheck= function (rectA, rectB) {
            rectA.y + rectA.height < rectB.y ||
            rectB.y + rectB.height < rectA.y);
 };
+
+
+https://github.dev/givemepower8/notes
+
+also /** and tab is jsdoc comment

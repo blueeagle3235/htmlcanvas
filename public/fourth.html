@@ -1,58 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ping pong</title>
-    
+
 </head>
+
 <body>
-    <canvas id='canvas' width='800' height='600' style="border:2px solid #000000;"></canvas>
+    <canvas id='canvas' width='1200' height='900' style="border:2px solid #000000;"></canvas>
     <script src='objects/ball.js'></script>
     <script src='../BookExamples/HTML5Animation/include/utils.js'></script>
     <script src='objects/rectangle.js'></script>
     <script>
-        var canvas=document.getElementById('canvas'),
-            context=canvas.getContext('2d'),
-            ball=new Ball(12),
-            rectangle=new Rectangle(130,20),
-            rectanglexv=0,
-            xvel=Math.random()*6-3,
-            yvel=Math.random() * (6 - 3) + 3;
+        var canvas = document.getElementById('canvas'),
+            context = canvas.getContext('2d'),
+            ball = new Ball(12),
+            rectangle = new Rectangle(130, 20),
+            rectanglexv = 0,
+            xvel = Math.random() * 8 - 4,
+            yvel = Math.random() * (8 - 4) + 4;
 
-        ball.x=canvas.width/2;
-        ball.y=canvas.height/2;
-        rectangle.x=canvas.width/2;
-        rectangle.y=canvas.height-50;
+        ball.x = canvas.width / 2;
+        ball.y = canvas.height / 2;
+        rectangle.x = canvas.width / 2;
+        rectangle.y = canvas.height - 50;
         window.addEventListener('keydown', keyInput, false);
-        function updateFrame(){
+        function updateFrame() {
             window.requestAnimationFrame(updateFrame);
-            context.clearRect(0,0,canvas.width,canvas.height);
+            context.clearRect(0, 0, canvas.width, canvas.height);
 
-            var boundaryleft=0,
-                boundarytop=0,
-                boundaryright=canvas.width
-                boundarybottom=canvas.height;
+            var boundaryleft = 0,
+                boundarytop = 0,
+                boundaryright = canvas.width
+            boundarybottom = canvas.height;
 
-            ball.x+=xvel;
-            ball.y+=yvel;
-            rectangle.x+=rectanglexv;
-            rectanglexv*=0.9;
+            ball.x += xvel;
+            ball.y += yvel;
+            rectangle.x += rectanglexv;
+            rectanglexv *= 0.9;
 
             if (utils.intersects(ball.getBounds(), rectangle)) {
-                yvel*=-1
+                yvel *= -1.1;
+                var intX = -1 * ((rectangle.x + rectangle.width / 2) - ball.x);
+                var normalizedintX = (intX / (rectangle.width / 2));
+                var bounceAngle = normalizedintX * (5 * 3.14 / 12);
+                console.log(normalizedintX);
+                xvel = yvel * -Math.sin(bounceAngle);
             }
 
             if (rectangle.x + rectangle.width > boundaryright) {
                 rectangle.x = boundaryright - rectangle.width;
-                rectanglexv*=0;
-            } else if (rectangle.x< boundaryleft) {
+                rectanglexv *= 0;
+            } else if (rectangle.x < boundaryleft) {
                 rectangle.x = boundaryleft;
-                rectanglexv*=0;
+                rectanglexv *= 0;
             }
 
-            
+
             if (ball.x + ball.radius > boundaryright) {
                 ball.x = boundaryright - ball.radius;
                 xvel *= -1;
@@ -71,19 +78,20 @@
             rectangle.draw(context);
 
         }
-        function keyInput(event){
+        function keyInput(event) {
             switch (event.keyCode) {
                 case 37:
-                rectanglexv=-5;
-                break;
+                    rectanglexv = -5;
+                    break;
                 case 39:
-                rectanglexv=+5;
-                break;
+                    rectanglexv = +5;
+                    break;
                 default:
             }
         }
         updateFrame();
-</script>
+    </script>
 
 </body>
+
 </html>
