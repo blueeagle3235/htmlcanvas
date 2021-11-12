@@ -1,4 +1,4 @@
-# HTML 5 Canvas Roadmap
+# HTML 5 Canvas Road-map
 
 - api
   - context
@@ -15,7 +15,7 @@
 - text
 - image
 - events
-  - keybord
+  - keyboard
   - mouse
   - ...
 - Transform
