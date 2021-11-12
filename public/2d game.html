@@ -1,65 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    <canvas id='canvas' width='800' height='600'style="border:2px solid #000000;"></canvas>
-    <script src='objects/rectangle.js'></script>
+  </head>
+  <body>
+    <canvas
+      id="canvas"
+      width="800"
+      height="600"
+      style="border: 2px solid #000000"
+    ></canvas>
+    <script src="objects/rectangle.js"></script>
     <script>
-        var canvas=document.getElementById('canvas'),
-            context=canvas.getContext('2d'),
-            square=new Rectangle(30,30),
-            boundaryleft = 0,
-            boundarytop = 0,
-            boundaryright = canvas.width,
-            boundarybottom = canvas.height;
-            //squarexv=0,
-            //squareyv=0;
-        square.x=canvas.width/2;
-        square.y=canvas.height/2;
-        window.addEventListener('keydown', keyInput, false);
-        function updateFrame(){
-            window.requestAnimationFrame(updateFrame);
-            context.clearRect(0,0,canvas.width,canvas.height);
-            // if (square.x+square.width>boundaryright){
-            //     square.x=boundaryright-square.width;
-            //     squarexv=0;
-            // } else if (square.x<boundaryleft){
-            //     square.x=boundaryleft;
-            //     squarexv=0;
-            // }
-            // square.x+=squarexv;
-            // square.y+=squareyv;
-            // squarexv*=0.8;
-            // squareyv*=0.8;
-            square.draw(context);
+      var canvas = document.getElementById("canvas"),
+        context = canvas.getContext("2d"),
+        square = new Rectangle(20, 20),
+        boundaryleft = 0,
+        boundarytop = 0,
+        boundaryright = canvas.width,
+        boundarybottom = canvas.height;
+      var maze = [[]];
+      //squarexv=0,
+      //squareyv=0;
+      square.x = canvas.width / 2;
+      square.y = canvas.height / 2;
+      window.addEventListener("keydown", keyInput, false);
+      function updateFrame() {
+        window.requestAnimationFrame(updateFrame);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        // if (square.x+square.width>boundaryright){
+        //     square.x=boundaryright-square.width;
+        //     squarexv=0;
+        // } else if (square.x<boundaryleft){
+        //     square.x=boundaryleft;
+        //     squarexv=0;
+        // }
+        // square.x+=squarexv;
+        // square.y+=squareyv;
+        // squarexv*=0.8;
+        // squareyv*=0.8;
+        square.draw(context);
+      }
+      function keyInput(event) {
+        switch (event.keyCode) {
+          case 38:
+            //squareyv=-1;
+            square.y -= square.width;
+            break;
+          case 40:
+            //squareyv=+1;
+            square.y += square.width;
+            break;
+          case 37:
+            //squarexv=-1;
+            square.x -= square.width;
+            break;
+          case 39:
+            //squarexv=+1;
+            square.x += square.width;
+            break;
+          default:
         }
-        function keyInput(event){
-            switch (event.keyCode) {
-                case 38:
-                //squareyv=-1;
-                square.y-=square.width;
-                break;
-                case 40:
-                //squareyv=+1;
-                square.y+=square.width;
-                break;
-                case 37:
-                //squarexv=-1;
-                square.x-=square.width;
-                break;
-                case 39:
-                //squarexv=+1;
-                square.x+=square.width;
-                break;
-                default:
-            }
-        }
-        updateFrame();
+      }
+      updateFrame();
     </script>
-</body>
+  </body>
 </html>
