@@ -17,11 +17,7 @@
     <script>
       var canvas = document.getElementById("canvas"),
         context = canvas.getContext("2d"),
-        square = new Rectangle(16, 16, 0, 0, "black"),
-        boundaryleft = 0,
-        boundarytop = 0,
-        boundaryright = canvas.width,
-        boundarybottom = canvas.height;
+        square = new Rectangle(16, 16, 0, 0, "black");
       var maze = [
         [1, 0, 1, 1, 1, 1, 1, 1, 1],
         [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -51,17 +47,6 @@
             }
           }
         }
-        // if (square.x+square.width>boundaryright){
-        //     square.x=boundaryright-square.width;
-        //     squarexv=0;
-        // } else if (square.x<boundaryleft){
-        //     square.x=boundaryleft;
-        //     squarexv=0;
-        // }
-        // square.x+=squarexv;
-        // square.y+=squareyv;
-        // squarexv*=0.8;
-        // squareyv*=0.8;
         square.draw(context);
       }
       function keyInput(event) {
