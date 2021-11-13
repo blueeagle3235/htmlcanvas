@@ -26,6 +26,8 @@
 - animation
 - physics
 
+Canvas is good to render data, iamge, create static effects. For animations, it's better to use game engines as usually everytime it uses `context.clearRect(0, 0, canvas.width, canvas.height);` to re-render the whole area.
+
 ## Events
 
 <https://www.codicode.com/art/how_to_draw_on_a_html5_canvas_with_a_mouse.aspx>
