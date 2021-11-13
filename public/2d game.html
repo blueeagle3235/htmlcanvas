@@ -17,20 +17,40 @@
     <script>
       var canvas = document.getElementById("canvas"),
         context = canvas.getContext("2d"),
-        square = new Rectangle(20, 20),
+        square = new Rectangle(16, 16, 0, 0, "black"),
         boundaryleft = 0,
         boundarytop = 0,
         boundaryright = canvas.width,
         boundarybottom = canvas.height;
-      var maze = [[]];
+      var maze = [
+        [1, 0, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 1, 0, 1, 0, 1, 0, 1],
+        [1, 0, 1, 0, 1, 0, 0, 0, 1],
+        [1, 0, 1, 1, 1, 0, 1, 0, 1],
+        [1, 0, 1, 0, 1, 0, 1, 0, 1],
+        [1, 0, 1, 0, 1, 0, 1, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 0, 1]
+      ];
+      //NOTE-PLEASE MAKE THE MAZE A SQUARE THANKS
+      var cords = [1, 0];
       //squarexv=0,
       //squareyv=0;
-      square.x = canvas.width / 2;
-      square.y = canvas.height / 2;
+      square.x = 22;
+      square.y = 2;
       window.addEventListener("keydown", keyInput, false);
       function updateFrame() {
         window.requestAnimationFrame(updateFrame);
         context.clearRect(0, 0, canvas.width, canvas.height);
+        for (var i = 0; i < maze.length; i++) {
+          for (var j = 0; j < maze[i].length; j++) {
+            if (maze[j][i] === 1) {
+              var temp = new Rectangle(20, 20, i * 20, j * 20, "gray");
+              temp.draw(context);
+            }
+          }
+        }
         // if (square.x+square.width>boundaryright){
         //     square.x=boundaryright-square.width;
         //     squarexv=0;
@@ -47,20 +67,33 @@
       function keyInput(event) {
         switch (event.keyCode) {
           case 38:
-            //squareyv=-1;
-            square.y -= square.width;
+            if (cords[1] === 0) break;
+            if (maze[cords[1] - 1][cords[0]] === 0) {
+              cords[1] -= 1;
+              square.y -= 20;
+            }
             break;
           case 40:
-            //squareyv=+1;
-            square.y += square.width;
+            if (cords[1] === maze[cords[1]].length - 1) {
+              alert("you win");
+              break;
+            }
+            if (maze[cords[1] + 1][cords[0]] === 0) {
+              cords[1] += 1;
+              square.y += 20;
+            }
             break;
           case 37:
-            //squarexv=-1;
-            square.x -= square.width;
+            if (maze[cords[1]][cords[0] - 1] === 0) {
+              cords[0] -= 1;
+              square.x -= 20;
+            }
             break;
           case 39:
-            //squarexv=+1;
-            square.x += square.width;
+            if (maze[cords[1]][cords[0] + 1] === 0) {
+              cords[0] += 1;
+              square.x += 20;
+            }
             break;
           default:
         }
