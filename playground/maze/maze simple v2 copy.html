@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maze simples</title>
+  </head>
+  <body>
+    <canvas
+      id="canvas"
+      width="800"
+      height="600"
+      style="border: 2px solid #000000"
+      >Canvas not supported</canvas
+    >
+    <script>
+      class Rectangle {
+        constructor(width, height, x, y, color) {
+          this.x = x;
+          this.y = y;
+          this.width = width;
+          this.height = height;
+          this.color = color;
+        }
+        draw(context) {
+          context.save();
+
+          context.translate(this.x, this.y);
+          context.fillStyle = this.color;
+          context.beginPath();
+          context.rect(0, 0, this.width, this.height);
+          context.closePath();
+          context.fill();
+          context.stroke();
+
+          context.restore();
+        }
+      }
+
+      class Mouse extends Rectangle {
+        constructor(width, height, x, y, color, turns, visited) {
+          super(width, height, x, y, color);
+          this.turns = 0;
+          this.visited = [];
+        }
+        decide() {
+          var validexits = [];
+          if (maze[Math.round(this.y / 20)][Math.round(this.x / 20) - 1] === 0)
+            validexits.push("left");
+          if (maze[Math.round(this.y / 20)][Math.round(this.x / 20) + 1] === 0)
+            validexits.push("right");
+          if (maze[Math.round(this.y / 20) - 1][Math.round(this.x / 20)] === 0)
+            validexits.push("top");
+          if (maze[Math.round(this.y / 20) + 1][Math.round(this.x / 20)] === 0)
+            validexits.push("bottom");
+          var next = Math.floor(Math.random() * validexits.length + 1);
+          switch (validexits[next]) {
+            case "left":
+              mouse.moveLeft();
+              this.visited.push([
+                Math.round(this.y / 20),
+                Math.round(this.x / 20) - 1
+              ]);
+              break;
+            case "right":
+              mouse.moveRight();
+              this.visited.push([
+                Math.round(this.y / 20),
+                Math.round(this.x / 20) + 1
+              ]);
+              break;
+            case "top":
+              mouse.moveUp();
+              this.visited.push([
+                Math.round(this.y / 20) - 1,
+                Math.round(this.x / 20)
+              ]);
+              break;
+            case "bottom":
+              mouse.moveDown();
+              this.visited.push([
+                Math.round(this.y / 20) + 1,
+                Math.round(this.x / 20)
+              ]);
+              break;
+            default:
+          }
+          return this.visited;
+        }
+
+        moveLeft() {
+          // if (
+          //   maze[Math.round(this.y / 20)][Math.round(this.x / 20) - 1] === 0
+          // ) {
+          this.x -= 20;
+          //}
+          this.turns++;
+        }
+        moveRight() {
+          // if (
+          //   maze[Math.round(this.y / 20)][Math.round(this.x / 20) + 1] === 0
+          // ) {
+          this.x += 20;
+          //}
+          this.turns++;
+        }
+        moveUp() {
+          if (Math.round(this.y / 20) === 0) return;
+          // if (
+          //   maze[Math.round(this.y / 20) - 1][Math.round(this.x / 20)] === 0
+          // ) {
+          this.y -= 20;
+          //}
+          this.turns++;
+        }
+        moveDown() {
+          if (Math.round(this.y / 20) === maze.length - 1) {
+            alert(`this mouse has made it in ${this.turns} turns!`);
+            return;
+          }
+          // if (
+          //   maze[Math.round(this.y / 20) + 1][Math.round(this.x / 20)] === 0
+          // ) {
+          this.y += 20;
+          //}
+          this.turns++;
+        }
+      }
+    </script>
+    <script>
+      let canvas = document.getElementById("canvas"),
+        context = canvas.getContext("2d"),
+        rectSize = 20,
+        maze = [
+          [1, 0, 1, 1, 1, 1, 1, 1, 1],
+          [1, 0, 0, 0, 0, 0, 0, 0, 1],
+          [1, 0, 0, 0, 0, 0, 0, 0, 1],
+          [1, 0, 0, 0, 0, 0, 0, 0, 1],
+          [1, 0, 0, 0, 0, 0, 0, 0, 1],
+          [1, 0, 0, 0, 0, 0, 0, 0, 1],
+          [1, 0, 0, 0, 0, 0, 0, 0, 1],
+          [1, 0, 0, 0, 0, 0, 0, 0, 1],
+          [1, 1, 1, 1, 1, 1, 1, 0, 1]
+        ];
+      let mouse = new Mouse(18, 18, 21, 1, "red");
+      function init() {
+        for (let i = 0; i < maze.length; i++) {
+          for (let j = 0; j < maze[i].length; j++) {
+            if (maze[j][i] === 1) {
+              let wall = new Rectangle(
+                rectSize,
+                rectSize,
+                i * rectSize,
+                j * rectSize,
+                "gray"
+              );
+              wall.draw(context);
+            }
+          }
+        }
+      }
+
+      function updateFrame() {
+        window.requestAnimationFrame(updateFrame);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        mouse.draw(context);
+        init();
+      }
+      // setInterval(() => {
+      //   switch (Math.floor(Math.random() * 4 + 1)) {
+      //     case 1:
+      //       mouse.moveUp();
+      //       console.log("up");
+      //       break;
+      //     case 2:
+      //       mouse.moveDown();
+      //       console.log("down");
+      //       break;
+      //     case 3:
+      //       mouse.moveLeft();
+      //       console.log("left");
+      //       break;
+      //     case 4:
+      //       mouse.moveRight();
+      //       console.log("right");
+      //       break;
+      //     default:
+      //   }
+      // }, 1000);
+      updateFrame();
+    </script>
+  </body>
+</html>
