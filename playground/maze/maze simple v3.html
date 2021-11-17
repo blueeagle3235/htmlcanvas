@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maze simples</title>
+  </head>
+  <body>
+    <canvas
+      id="canvas"
+      width="800"
+      height="600"
+      style="border: 2px solid #000000"
+      >Canvas not supported</canvas
+    >
+    <script>
+      class Rectangle {
+        constructor(width, height, x, y, color) {
+          this.x = x;
+          this.y = y;
+          this.width = width;
+          this.height = height;
+          this.color = color;
+        }
+        draw(context) {
+          context.save();
+
+          context.translate(this.x, this.y);
+          context.fillStyle = this.color;
+          context.beginPath();
+          context.rect(0, 0, this.width, this.height);
+          context.closePath();
+          context.fill();
+          context.stroke();
+
+          context.restore();
+        }
+      }
+    </script>
+    <script>
+      let canvas = document.getElementById("canvas"),
+        context = canvas.getContext("2d"),
+        rectSize = 20,
+        maze = [
+          [0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+          [0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
+          [1, 0, 1, 0, 1, 0, 1, 0, 0, 1],
+          [1, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+          [1, 0, 1, 1, 1, 0, 1, 0, 1, 1],
+          [1, 0, 1, 0, 1, 0, 1, 0, 0, 1],
+          [1, 0, 1, 0, 1, 0, 1, 0, 1, 1],
+          [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+          [1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+          [1, 1, 1, 1, 1, 1, 1, 1, 1, 0]
+        ];
+
+      // maze is M * N
+      //[0,0] [0,1] [0,2]....[0,N]
+      //[1,0] [1,1] [1,2]....[1,N]
+      //..........................
+      //[M,0] [M,1] [M,2]....[M,N]
+
+      const visited = new Map();
+      for (let i = 0; i < maze.length; i++) {
+        for (let j = 0; j < maze[i].length; j++) {
+          visited.set(`${i},${j}`, false);
+        }
+      }
+
+      function canMoveTo(x, y) {
+        if (x < 0 || y < 0 || x > maze[0].length - 1 || y > maze.length - 1)
+          return false;
+
+        return maze[x][y] === 0;
+      }
+
+      function isVisited(x, y) {
+        return visited.get(`${x},${y}`);
+      }
+
+      function markVisited(x, y) {
+        visited.set(`${x},${y}`, true);
+      }
+
+      function isDeadEnd(x, y) {
+        return (
+          (isVisited(x, y + 1) === true || canMoveTo(x, y + 1) === false) &&
+          (isVisited(x, y - 1) === true || canMoveTo(x, y - 1) === false) &&
+          (isVisited(x + 1, y) === true || canMoveTo(x + 1, y) === false) &&
+          (isVisited(x - 1, y) === true || canMoveTo(x - 1, y) === false)
+        );
+      }
+
+      function areWeThereYet(x, y) {
+        return x === 9 && y === 9;
+      }
+
+      let path = [];
+      function move(x, y) {
+        console.log(`move to [${x}, ${y}]`);
+        markVisited(x, y);
+        path.push({ x: x, y: y });
+        if (areWeThereYet(x, y)) {
+          console.log("Yeah!");
+          return;
+        }
+
+        // move down
+        if (isVisited(x, y + 1) === false && canMoveTo(x, y + 1)) {
+          move(x, y + 1);
+        }
+
+        // move right
+        if (isVisited(x + 1, y) === false && canMoveTo(x + 1, y)) {
+          move(x + 1, y);
+        }
+
+        // move left
+        if (isVisited(x - 1, y) === false && canMoveTo(x - 1, y)) {
+          move(x - 1, y);
+        }
+
+        // move up
+        if (isVisited(x, y - 1) === false && canMoveTo(x, y - 1)) {
+          move(x, y - 1);
+        }
+
+        console.log(`move on from ${x}, ${y}`);
+        return;
+      }
+
+      function filterPath() {
+        let index = -1;
+        for (let i = 0; i < path.length; i++) {
+          const { x, y } = path[i];
+          if (areWeThereYet(x, y)) {
+            index = i;
+            break;
+          }
+        }
+        if (index !== -1) {
+          path = path.slice(0, index);
+        }
+      }
+      function drawWalls() {
+        for (let i = 0; i < maze.length; i++) {
+          for (let j = 0; j < maze[i].length; j++) {
+            if (maze[i][j] === 1) {
+              let wall = new Rectangle(
+                rectSize,
+                rectSize,
+                j * rectSize,
+                i * rectSize,
+                "gray"
+              );
+              wall.draw(context);
+            }
+          }
+        }
+      }
+      function drawPath() {
+        for (let i = 0; i < path.length; i++) {
+          const { x, y } = path[i];
+          let wall = new Rectangle(
+            rectSize,
+            rectSize,
+            x * rectSize,
+            y * rectSize,
+            "red"
+          );
+          wall.draw(context);
+        }
+      }
+
+      function updateFrame() {
+        window.requestAnimationFrame(updateFrame);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        drawWalls();
+        drawPath();
+      }
+
+      move(0, 0);
+      filterPath();
+      updateFrame();
+    </script>
+  </body>
+</html>
