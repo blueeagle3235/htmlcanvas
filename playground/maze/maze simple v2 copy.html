@@ -46,6 +46,11 @@
         }
         decide() {
           var validexits = [];
+          this.visited.push([this.x, this.y]);
+          if (Math.round(this.y / 20) === 0) {
+            mouse.moveDown();
+            return;
+          }
           if (maze[Math.round(this.y / 20)][Math.round(this.x / 20) - 1] === 0)
             validexits.push("left");
           if (maze[Math.round(this.y / 20)][Math.round(this.x / 20) + 1] === 0)
@@ -54,37 +59,50 @@
             validexits.push("top");
           if (maze[Math.round(this.y / 20) + 1][Math.round(this.x / 20)] === 0)
             validexits.push("bottom");
-          var next = Math.floor(Math.random() * validexits.length + 1);
-          switch (validexits[next]) {
+          console.log(validexits.length);
+          switch (validexits[Math.floor(Math.random() * validexits.length)]) {
             case "left":
-              mouse.moveLeft();
-              this.visited.push([
-                Math.round(this.y / 20),
-                Math.round(this.x / 20) - 1
-              ]);
+              for (let i = 0; i < this.visited.length; i++) {
+                if (this.visited[i][0] !== this.x - 20) {
+                  mouse.moveLeft();
+                  console.log("leftfor done");
+                  break;
+                }
+              }
+              console.log("leftbreak");
               break;
             case "right":
-              mouse.moveRight();
-              this.visited.push([
-                Math.round(this.y / 20),
-                Math.round(this.x / 20) + 1
-              ]);
+              for (let i = 0; i < this.visited.length; i++) {
+                if (this.visited[i][0] !== this.x + 20) {
+                  mouse.moveRight();
+                  console.log("rightfor done");
+                  break;
+                }
+              }
+              console.log("rightbreak");
               break;
             case "top":
-              mouse.moveUp();
-              this.visited.push([
-                Math.round(this.y / 20) - 1,
-                Math.round(this.x / 20)
-              ]);
+              for (let i = 0; i < this.visited.length; i++) {
+                if (this.visited[i][1] !== this.y - 20) {
+                  mouse.moveUp();
+                  console.log("topfordone");
+                  break;
+                }
+              }
+              console.log("topbreak");
               break;
             case "bottom":
-              mouse.moveDown();
-              this.visited.push([
-                Math.round(this.y / 20) + 1,
-                Math.round(this.x / 20)
-              ]);
+              for (let i = 0; i < this.visited.length; i++) {
+                if (this.visited[i][1] !== this.y + 20) {
+                  mouse.moveDown();
+                  console.log("bottomfordone");
+                  break;
+                }
+              }
+              console.log("bottombreak");
               break;
             default:
+              console.log("defaulted");
           }
           return this.visited;
         }
@@ -106,7 +124,6 @@
           this.turns++;
         }
         moveUp() {
-          if (Math.round(this.y / 20) === 0) return;
           // if (
           //   maze[Math.round(this.y / 20) - 1][Math.round(this.x / 20)] === 0
           // ) {
@@ -143,7 +160,7 @@
           [1, 0, 0, 0, 0, 0, 0, 0, 1],
           [1, 1, 1, 1, 1, 1, 1, 0, 1]
         ];
-      let mouse = new Mouse(18, 18, 21, 1, "red");
+      let mouse = new Mouse(18, 18, 61, 61, "red");
       function init() {
         for (let i = 0; i < maze.length; i++) {
           for (let j = 0; j < maze[i].length; j++) {
