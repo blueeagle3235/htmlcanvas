@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maze simples</title>
+  </head>
+  <body>
+    <canvas
+      id="canvas"
+      width="800"
+      height="600"
+      style="border: 2px solid #000000"
+      >Canvas not supported</canvas
+    >
+    <script>
+      class Rectangle {
+        constructor(width, height, x, y, color) {
+          this.x = x;
+          this.y = y;
+          this.width = width;
+          this.height = height;
+          this.color = color;
+        }
+        draw(context) {
+          context.save();
+
+          context.translate(this.x, this.y);
+          context.fillStyle = this.color;
+          context.beginPath();
+          context.rect(0, 0, this.width, this.height);
+          context.closePath();
+          context.fill();
+          context.stroke();
+
+          context.restore();
+        }
+      }
+
+      class Mouse extends Rectangle {
+        constructor(width, height, x, y, color) {
+          super(width, height, x, y, color);
+          this.turns = 0;
+          this.visited = [];
+          this.xp = 0;
+          this.yp = 0;
+        }
+        isClear(x, y) {
+          if (x < 0 || y < 0 || x > maze.length - 1 || y > maze.length - 1) {
+            return false;
+          } else return maze[x][y] === 0;
+        }
+        // canMove(x, y) {
+        //   this.validmoves = [];
+        //   if (isClear(x - 1, y) === true && isVisited(x - 1, y) === false)
+        //     this.validmoves.push("left");
+        //   if (isClear(x + 1, y) === true && isVisited(x + 1, y) === false)
+        //     this.validmoves.push("right");
+        //   if (isClear(x, y - 1) === true && isVisited(x, y - 1) === false)
+        //     this.validmoves.push("up");
+        //   if (isClear(x, y + 1) === true && isVisited(x, y + 1) === false)
+        //     this.validmoves.push("down");
+        // }
+        isVisited(x, y) {
+          for (let i = 0; i < this.visited.length; i++) {
+            if (this.visited[i] === [x, y]) {
+              return true;
+            }
+          }
+          return false;
+        }
+        decide(x, y) {
+          this.xp = Math.round(this.x / 20);
+          this.yp = Math.round(this.y / 20);
+          this.visited.push([x, y]);
+          if (x === 8 && y === 9) return;
+          if (
+            this.isVisited(x, y + 1) === false &&
+            this.isClear(x, y + 1) === true
+          ) {
+            console.log("downwork");
+            this.y += 20;
+            this.decide(x, y + 1);
+          }
+          if (
+            this.isVisited(x + 1, y) === false &&
+            this.isClear(x + 1, y) === true
+          ) {
+            console.log("rightwork");
+            this.x += 20;
+            this.decide(x + 1, y);
+          }
+          if (
+            this.isVisited(x, y - 1) === false &&
+            this.isClear(x, y - 1) === true
+          ) {
+            console.log("upwork");
+            this.y -= 20;
+            this.decide(x, y - 1);
+          }
+          if (
+            this.isVisited(x - 1, y) === false &&
+            this.isClear(x - 1, y) === true
+          ) {
+            console.log("leftwork");
+            this.x -= 20;
+            this.decide(x - 1, y);
+          }
+        }
+      }
+    </script>
+    <script>
+      let canvas = document.getElementById("canvas"),
+        context = canvas.getContext("2d"),
+        rectSize = 20,
+        maze = [
+          [1, 0, 1, 1, 1, 1, 1, 1, 1],
+          [1, 0, 0, 0, 0, 0, 0, 0, 1],
+          [1, 0, 0, 0, 0, 0, 0, 0, 1],
+          [1, 0, 0, 0, 0, 0, 0, 0, 1],
+          [1, 0, 0, 0, 0, 0, 0, 0, 1],
+          [1, 0, 0, 0, 0, 0, 0, 0, 1],
+          [1, 0, 0, 0, 0, 0, 0, 0, 1],
+          [1, 0, 0, 0, 0, 0, 0, 0, 1],
+          [1, 1, 1, 1, 1, 1, 1, 0, 1]
+        ];
+      let mouse = new Mouse(18, 18, 61, 61, "red");
+      function init() {
+        for (let i = 0; i < maze.length; i++) {
+          for (let j = 0; j < maze[i].length; j++) {
+            if (maze[j][i] === 1) {
+              let wall = new Rectangle(
+                rectSize,
+                rectSize,
+                i * rectSize,
+                j * rectSize,
+                "gray"
+              );
+              wall.draw(context);
+            }
+          }
+        }
+      }
+
+      function updateFrame() {
+        window.requestAnimationFrame(updateFrame);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        mouse.draw(context);
+        init();
+      }
+      // setInterval(() => {
+      //   mouse.decide(mouse.xp, mouse.yp);
+      // }, 1000);
+      updateFrame();
+    </script>
+  </body>
+</html>

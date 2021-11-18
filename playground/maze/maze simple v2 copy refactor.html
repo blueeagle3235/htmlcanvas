@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maze simples</title>
+  </head>
+  <body>
+    <canvas
+      id="canvas"
+      width="800"
+      height="600"
+      style="border: 2px solid #000000"
+      >Canvas not supported</canvas
+    >
+    <script>
+      class Rectangle {
+        constructor(width, height, x, y, color) {
+          this.x = x;
+          this.y = y;
+          this.width = width;
+          this.height = height;
+          this.color = color;
+        }
+        draw(context) {
+          context.save();
+
+          context.translate(this.x, this.y);
+          context.fillStyle = this.color;
+          context.beginPath();
+          context.rect(0, 0, this.width, this.height);
+          context.closePath();
+          context.fill();
+          context.stroke();
+
+          context.restore();
+        }
+      }
+    </script>
+    <script>
+      let canvas = document.getElementById("canvas"),
+        context = canvas.getContext("2d"),
+        rectSize = 20,
+        maze = [
+          [1, 0, 1, 1, 1, 1, 1, 1, 1],
+          [1, 0, 0, 0, 0, 0, 0, 0, 1],
+          [1, 0, 1, 0, 1, 0, 1, 0, 1],
+          [1, 0, 1, 0, 1, 0, 0, 0, 1],
+          [1, 0, 1, 1, 1, 0, 1, 0, 1],
+          [1, 0, 1, 0, 1, 0, 1, 0, 1],
+          [1, 0, 1, 0, 1, 0, 1, 0, 1],
+          [1, 0, 0, 0, 0, 0, 0, 0, 1],
+          [1, 1, 1, 1, 1, 1, 1, 0, 1]
+        ];
+      var visited=[],
+      var validmoves=[];
+      function move(x,y){
+
+      }
+      function isClear(x,y){
+        if (x<0||y<0||x>maze.length-1||y>maze.length-1){
+          return false;
+        }else return maze[x][y]===0;
+      }
+      function canmove(){
+        validmoves=[];
+        if(isClear(x-1,y)===true)validmoves.push('left');
+        if(isClear(x+1,y)===true)validmoves.push('right');
+        if(isClear(x,y-1)===true)validmoves.push('up');
+        if(isClear(x,y+1)===true)validmoves.push('down');
+      }
+      function move(x,y){
+        visited.push(x,y);
+
+      }
+      function drawWalls() {
+        for (let i = 0; i < maze.length; i++) {
+          for (let j = 0; j < maze[i].length; j++) {
+            if (maze[i][j] === 1) {
+              let wall = new Rectangle(
+                rectSize,
+                rectSize,
+                j * rectSize,
+                i * rectSize,
+                "gray"
+              );
+              wall.draw(context);
+            }
+          }
+        }
+      }
+
+      function updateFrame() {
+        window.requestAnimationFrame(updateFrame);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        drawWalls();
+      }
+
+      updateFrame();
+    </script>
+  </body>
+</html>
