@@ -49,7 +49,7 @@
         isClear(x, y) {
           if (x < 0 || y < 0 || x > maze.length - 1 || y > maze.length - 1) {
             return false;
-          } else return maze[x][y] === 0;
+          } else return maze[y][x] === 0;
         }
         // canMove(x, y) {
         //   this.validmoves = [];
@@ -62,24 +62,29 @@
         //   if (isClear(x, y + 1) === true && isVisited(x, y + 1) === false)
         //     this.validmoves.push("down");
         // }
+
         isVisited(x, y) {
           for (let i = 0; i < this.visited.length; i++) {
-            if (this.visited[i] === [x, y]) {
+            if (this.visited[i][0] === x && this.visited[i][1] === y) {
               return true;
             }
           }
           return false;
         }
         decide(x, y) {
+          this.turns += 1;
+          if (x === maze.length - 2 && y === maze.length - 1) {
+            alert(`won in ${this.turns} turns`);
+            console.log(`win at ${x},${y}`);
+          }
           this.xp = Math.round(this.x / 20);
           this.yp = Math.round(this.y / 20);
           this.visited.push([x, y]);
-          if (x === 8 && y === 9) return;
           if (
             this.isVisited(x, y + 1) === false &&
             this.isClear(x, y + 1) === true
           ) {
-            console.log("downwork");
+            console.log(`moved DOWN to ${[x, y + 1]}`);
             this.y += 20;
             this.decide(x, y + 1);
           }
@@ -87,7 +92,7 @@
             this.isVisited(x + 1, y) === false &&
             this.isClear(x + 1, y) === true
           ) {
-            console.log("rightwork");
+            console.log(`moved RIGHT to ${[x + 1, y]}`);
             this.x += 20;
             this.decide(x + 1, y);
           }
@@ -95,7 +100,7 @@
             this.isVisited(x, y - 1) === false &&
             this.isClear(x, y - 1) === true
           ) {
-            console.log("upwork");
+            console.log(`moved UP to ${[x, y - 1]}`);
             this.y -= 20;
             this.decide(x, y - 1);
           }
@@ -103,7 +108,7 @@
             this.isVisited(x - 1, y) === false &&
             this.isClear(x - 1, y) === true
           ) {
-            console.log("leftwork");
+            console.log(`moved LEFT to ${[x - 1, y]}`);
             this.x -= 20;
             this.decide(x - 1, y);
           }
@@ -115,17 +120,27 @@
         context = canvas.getContext("2d"),
         rectSize = 20,
         maze = [
-          [1, 0, 1, 1, 1, 1, 1, 1, 1],
-          [1, 0, 0, 0, 0, 0, 0, 0, 1],
-          [1, 0, 0, 0, 0, 0, 0, 0, 1],
-          [1, 0, 0, 0, 0, 0, 0, 0, 1],
-          [1, 0, 0, 0, 0, 0, 0, 0, 1],
-          [1, 0, 0, 0, 0, 0, 0, 0, 1],
-          [1, 0, 0, 0, 0, 0, 0, 0, 1],
-          [1, 0, 0, 0, 0, 0, 0, 0, 1],
-          [1, 1, 1, 1, 1, 1, 1, 0, 1]
+          [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+          [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+          [1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1],
+          [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1],
+          [1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1],
+          [1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1],
+          [1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1],
+          [1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1],
+          [1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
+          [1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+          [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1],
+          [1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
+          [1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1],
+          [1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1],
+          [1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1],
+          [1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
+          [1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1],
+          [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
+          [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1]
         ];
-      let mouse = new Mouse(18, 18, 61, 61, "red");
+      let mouse = new Mouse(18, 18, 21, 1, "red");
       function init() {
         for (let i = 0; i < maze.length; i++) {
           for (let j = 0; j < maze[i].length; j++) {
@@ -142,12 +157,26 @@
           }
         }
       }
+      function drawVisited() {
+        for (let i = 0; i < mouse.visited.length; i++) {
+          let wall = new Rectangle(
+            rectSize,
+            rectSize,
+            mouse.visited[i][0] * rectSize,
+            mouse.visited[i][1] * rectSize,
+            //`${i}F${i}F${i}F`
+            "red"
+          );
+          wall.draw(context);
+        }
+      }
 
       function updateFrame() {
         window.requestAnimationFrame(updateFrame);
         context.clearRect(0, 0, canvas.width, canvas.height);
         mouse.draw(context);
         init();
+        drawVisited();
       }
       // setInterval(() => {
       //   mouse.decide(mouse.xp, mouse.yp);
