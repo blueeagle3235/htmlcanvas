@@ -81,6 +81,12 @@
       //[1,0] [1,1] [1,2]....[1,N]
       //..........................
       //[M,0] [M,1] [M,2]....[M,N]
+      // the coordinate startd from left top
+      // x---->
+      // y
+      // |
+      // |
+      // V
 
       const visited = new Map();
       for (let i = 0; i < maze.length; i++) {
@@ -114,6 +120,7 @@
       }
 
       function areWeThereYet(x, y) {
+        // the right bottom
         return x === maze[0].length - 1 && y === maze.length - 1;
       }
 
@@ -166,6 +173,7 @@
           path = [];
         }
       }
+
       function drawWalls() {
         for (let i = 0; i < maze.length; i++) {
           for (let j = 0; j < maze[i].length; j++) {
@@ -182,6 +190,7 @@
           }
         }
       }
+
       function drawPath() {
         for (let i = 0; i < path.length; i++) {
           const { x, y } = path[i];
